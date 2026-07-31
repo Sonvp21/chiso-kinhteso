@@ -39,20 +39,13 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <!-- Vai trò -->
-<div class="mt-4">
-    <x-input-label for="role" :value="__('Vai trò')" />
-    <select id="role" name="role" required class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-        <option value="doanh_nghiep">Doanh nghiệp</option>
-        <option value="quan_tri">Quản trị</option>
-    </select>
-    <x-input-error :messages="$errors->get('role')" class="mt-2" />
-</div>
+        <!-- Vai trò (mặc định: Doanh nghiệp) -->
+<input type="hidden" name="role" value="doanh_nghiep">
 
 <!-- Xã/Phường -->
 <div class="mt-4">
     <x-input-label for="xa_phuong_id" :value="__('Xã/Phường')" />
-    <select id="xa_phuong_id" name="xa_phuong_id" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+    <select id="xa_phuong_id" name="xa_phuong_id" class="block mt-1 w-full appearance-none bg-white border border-gray-300 rounded-lg shadow-sm px-3 py-2 pr-8 text-sm focus:border-indigo-500 focus:ring-indigo-500 bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 20 20%27 fill=%27%236b7280%27%3E%3Cpath fill-rule=%27evenodd%27 d=%27M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z%27 clip-rule=%27evenodd%27/%3E%3C/svg%3E')] bg-no-repeat bg-[right_0.5rem_center] bg-[length:1.25em]">
         <option value="">-- Chọn xã/phường --</option>
         @foreach (\App\Models\XaPhuong::all() as $xa)
             <option value="{{ $xa->id }}">{{ $xa->ten_xa }}</option>

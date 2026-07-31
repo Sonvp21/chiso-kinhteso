@@ -24,8 +24,8 @@ Route::middleware('auth')->group(function () {
 
     // Admin
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
-        Route::resource('chi-so', ChiSoController::class);
-        Route::resource('phien-ban', BoChiSoPhienBanController::class);
+        Route::resource('chi-so', ChiSoController::class)->except(['create', 'edit', 'show']);
+        Route::resource('phien-ban', BoChiSoPhienBanController::class)->except(['create', 'edit', 'show']);
         Route::get('bao-cao', [KhaoSatController::class, 'baoCaoAdmin'])->name('bao-cao');
     });
 
