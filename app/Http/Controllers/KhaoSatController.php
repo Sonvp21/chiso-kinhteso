@@ -202,4 +202,68 @@ class KhaoSatController extends Controller
 
         return view('admin.bao-cao.index', compact('khaoSats'));
     }
+
+    public function xuatCsv()
+    {
+        $khaoSats = KhaoSat::with(['user.xaPhuong', 'phienBan', 'ketQua'])
+            ->where('trang_thai', 'da_tinh')
+            ->orderByDesc('updated_at')
+            ->get();
+
+        $filename = 'bao-cao-chi-so-kinh-te-so-' . now()->format('Ymd-His') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+        ];
+
+        $callback = function () use ($khaoSats) {
+            $file = fopen('php://output', 'w');
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF)); // BOM để Excel đọc đúng tiếng Việt
+
+            fputcsv($file, ['Doanh nghiệp', 'Xã/Phường', 'Phiên bản', 'Ngày nộp', 'Điểm tổng hợp', 'Mức đánh giá']);
+
+            foreach ($khaoSats as $ks) {
+                fputcsv($file, [
+                    $ks->user->ten_doanh_nghiep ?: $ks->user->name,
+                    $ks->user->xaPhuong->ten_xa ?? '',
+                    $ks->phienBan->ten_phien_ban ?: $ks->phienBan->nam,
+                    $ks->ngay_nop?->format('d/m/Y'),
+                    number_format($ks->ketQua->diem_tong_hop ?? 0, 2),
+                    $ks->ketQua->muc_danh_gia ?? '',
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function xuatPdf()
+    {
+        $khaoSats = KhaoSat::with(['user.xaPhuong', 'phienBan', 'ketQua'])
+            ->where('trang_thai', 'da_tinh')
+            ->orderByDesc('updated_at')
+            ->get();
+
+        $diemTB = $khaoSats->count() ? round($khaoSats->avg(fn($ks) => $ks->ketQua->diem_tong_hop ?? 0), 2) : 0;
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.bao-cao.pdf', [
+            'khaoSats' => $khaoSats,
+            'diemTB' => $diemTB,
+        ]);
+
+        return $pdf->download('bao-cao-chi-so-kinh-te-so-' . now()->format('Ymd-His') . '.pdf');
+    }
+
+    // Admin xem chi tiết 1 khảo sát cụ thể
+    public function baoCaoChiTiet(KhaoSat $khaoSat)
+    {
+        $khaoSat->load(['user.xaPhuong', 'phienBan', 'ketQua']);
+
+        abort_if(!$khaoSat->ketQua, 404, 'Khảo sát này chưa có kết quả.');
+
+        return view('admin.bao-cao.chi-tiet', compact('khaoSat'));
+    }
 }

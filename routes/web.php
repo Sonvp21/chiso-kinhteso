@@ -27,6 +27,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('chi-so', ChiSoController::class)->except(['create', 'edit', 'show']);
         Route::resource('phien-ban', BoChiSoPhienBanController::class)->except(['create', 'edit', 'show']);
         Route::get('bao-cao', [KhaoSatController::class, 'baoCaoAdmin'])->name('bao-cao');
+        Route::get('bao-cao/xuat-csv', [KhaoSatController::class, 'xuatCsv'])->name('bao-cao.xuat-csv');
+        Route::get('bao-cao/xuat-pdf', [KhaoSatController::class, 'xuatPdf'])->name('bao-cao.xuat-pdf');
+        Route::get('bao-cao/{khaoSat}', [KhaoSatController::class, 'baoCaoChiTiet'])->name('bao-cao.chi-tiet');
     });
 
     // Doanh nghiệp
@@ -36,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::get('khao-sat/{khaoSat}', [KhaoSatController::class, 'edit'])->name('khao-sat.edit');
     Route::post('khao-sat/{khaoSat}/luu', [KhaoSatController::class, 'luu'])->name('khao-sat.luu');
     Route::post('khao-sat/{khaoSat}/nop', [KhaoSatController::class, 'nop'])->name('khao-sat.nop');
+
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

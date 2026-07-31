@@ -1,8 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        <div>
-            <h2 class="font-semibold text-xl text-gray-900">Báo cáo tổng hợp</h2>
-            <p class="text-sm text-gray-500 mt-0.5">Kết quả các khảo sát đã nộp</p>
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="font-semibold text-xl text-gray-900">Báo cáo tổng hợp</h2>
+                <p class="text-sm text-gray-500 mt-0.5">Kết quả các khảo sát đã nộp</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="{{ route('admin.bao-cao.xuat-csv') }}" class="px-4 py-2 text-sm bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-lg transition inline-flex items-center gap-2">
+                    <i class="fa-solid fa-file-csv"></i> Xuất CSV
+                </a>
+                <a href="{{ route('admin.bao-cao.xuat-pdf') }}" class="px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition inline-flex items-center gap-2">
+                    <i class="fa-solid fa-file-pdf"></i> Xuất PDF
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -43,7 +53,7 @@
                 </thead>
                 <tbody class="divide-y divide-gray-50">
                     @forelse ($khaoSats as $ks)
-                    <tr class="hover:bg-gray-50/70 transition">
+                    <tr onclick="window.location='{{ route('admin.bao-cao.chi-tiet', $ks) }}'" class="hover:bg-gray-50/70 transition cursor-pointer">
                         <td class="p-3 text-gray-800 font-medium">{{ $ks->user->ten_doanh_nghiep ?: $ks->user->name }}</td>
                         <td class="p-3 text-gray-500">{{ $ks->user->xaPhuong->ten_xa ?? '—' }}</td>
                         <td class="p-3 text-gray-500">{{ $ks->phienBan->ten_phien_ban ?: $ks->phienBan->nam }}</td>
