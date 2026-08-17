@@ -1,82 +1,82 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <div>
-                <h2 class="font-semibold text-xl text-gray-900">Báo cáo tổng hợp</h2>
-                <p class="text-sm text-gray-500 mt-0.5">Kết quả các khảo sát đã nộp</p>
-            </div>
-            <div class="flex items-center gap-2">
-                <a href="{{ route('admin.bao-cao.xuat-csv') }}" class="px-4 py-2 text-sm bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-lg transition inline-flex items-center gap-2">
-                    <i class="fa-solid fa-file-csv"></i> Xuất CSV
-                </a>
-                <a href="{{ route('admin.bao-cao.xuat-pdf') }}" class="px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition inline-flex items-center gap-2">
-                    <i class="fa-solid fa-file-pdf"></i> Xuất PDF
-                </a>
-            </div>
+        <div>
+            <h2 class="font-semibold text-xl text-gray-900">Báo cáo tổng hợp</h2>
+            <p class="text-sm text-gray-500 mt-0.5">Thống kê tỷ lệ % theo từng chỉ tiêu khảo sát</p>
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-6xl mx-auto px-4">
-        @php
-            $daNop = $khaoSats->count();
-            $diemTB = $daNop ? round($khaoSats->avg(fn($ks) => $ks->ketQua->diem_tong_hop ?? 0), 2) : 0;
-        @endphp
+    <div class="py-8 max-w-4xl mx-auto px-4">
+        <div class="flex items-center justify-between mb-6">
+            <div class="bg-white rounded-xl border border-gray-100 p-4 flex-1 mr-4">
+                <p class="text-xs text-gray-400 uppercase tracking-wide">Số doanh nghiệp đã nộp (năm {{ $nam }})</p>
+                <p class="text-2xl font-semibold text-gray-900 mt-1">{{ $tongSoDaNop }}</p>
+            </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            <div class="bg-white rounded-xl border border-gray-100 p-4">
-                <p class="text-xs text-gray-400 uppercase tracking-wide">Khảo sát đã nộp</p>
-                <p class="text-2xl font-semibold text-gray-900 mt-1">{{ $daNop }}</p>
+            <div class="flex items-center gap-2 shrink-0 mr-4">
+                <a href="{{ route('admin.bao-cao.xuat-csv', ['nam' => $nam]) }}" class="px-4 py-2 text-sm bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-lg transition inline-flex items-center gap-2">
+                    <i class="fa-solid fa-file-csv"></i> CSV
+                </a>
+                <a href="{{ route('admin.bao-cao.xuat-pdf', ['nam' => $nam]) }}" class="px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition inline-flex items-center gap-2">
+                    <i class="fa-solid fa-file-pdf"></i> PDF
+                </a>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-4">
-                <p class="text-xs text-gray-400 uppercase tracking-wide">Điểm trung bình</p>
-                <p class="text-2xl font-semibold text-gray-900 mt-1">{{ number_format($diemTB, 2) }}</p>
-            </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-4">
-                <p class="text-xs text-gray-400 uppercase tracking-wide">Doanh nghiệp Tốt/Khá</p>
-                <p class="text-2xl font-semibold text-gray-900 mt-1">
-                    {{ $khaoSats->filter(fn($ks) => in_array($ks->ketQua->muc_danh_gia ?? '', ['Tốt', 'Khá']))->count() }}
-                </p>
-            </div>
+
+            @if ($cacNam->count() > 1)
+            <form method="GET" class="shrink-0">
+                <select name="nam" onchange="this.form.submit()" class="rounded-lg border border-gray-300 text-sm px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500">
+                    @foreach ($cacNam as $n)
+                        <option value="{{ $n }}" {{ $n == $nam ? 'selected' : '' }}>Năm {{ $n }}</option>
+                    @endforeach
+                </select>
+            </form>
+            @endif
         </div>
 
-        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="border-b border-gray-100 text-gray-400 text-xs uppercase tracking-wide">
-                        <th class="p-3 text-left font-medium">Doanh nghiệp</th>
-                        <th class="p-3 text-left font-medium">Xã/Phường</th>
-                        <th class="p-3 text-left font-medium">Phiên bản</th>
-                        <th class="p-3 text-left font-medium">Ngày nộp</th>
-                        <th class="p-3 text-right font-medium">Điểm tổng hợp</th>
-                        <th class="p-3 text-left font-medium">Mức đánh giá</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-50">
-                    @forelse ($khaoSats as $ks)
-                    <tr onclick="window.location='{{ route('admin.bao-cao.chi-tiet', $ks) }}'" class="hover:bg-gray-50/70 transition cursor-pointer">
-                        <td class="p-3 text-gray-800 font-medium">{{ $ks->user->ten_doanh_nghiep ?: $ks->user->name }}</td>
-                        <td class="p-3 text-gray-500">{{ $ks->user->xaPhuong->ten_xa ?? '—' }}</td>
-                        <td class="p-3 text-gray-500">{{ $ks->phienBan->ten_phien_ban ?: $ks->phienBan->nam }}</td>
-                        <td class="p-3 text-gray-500">{{ $ks->ngay_nop?->format('d/m/Y') }}</td>
-                        <td class="p-3 text-right font-semibold text-gray-800 tabular-nums">{{ number_format($ks->ketQua->diem_tong_hop ?? 0, 2) }}</td>
-                        <td class="p-3">
-                            @php $m = $ks->ketQua->muc_danh_gia ?? ''; @endphp
-                            <span class="text-xs px-2 py-0.5 rounded-full font-medium
-                                {{ $m === 'Tốt' ? 'bg-emerald-50 text-emerald-700' :
-                                   ($m === 'Khá' ? 'bg-blue-50 text-blue-700' :
-                                   ($m === 'Trung bình' ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700')) }}">
-                                {{ $m }}
+        @if ($tongSoDaNop === 0)
+        <div class="bg-white border border-gray-100 rounded-xl p-10 text-center text-gray-400">
+            <i class="fa-solid fa-inbox text-2xl mb-2 block"></i>
+            Chưa có khảo sát nào được nộp trong năm {{ $nam }}.
+        </div>
+        @else
+        @foreach ($nhoms as $nhom)
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+            <div class="bg-gray-50/70 px-5 py-3 border-b border-gray-100">
+                <p class="text-sm font-semibold text-gray-700">{{ $nhom->ten }}</p>
+            </div>
+
+            <div class="divide-y divide-gray-50">
+                @foreach ($nhom->cauHois as $ch)
+                <div class="p-5">
+                    <p class="text-sm text-gray-800 font-medium mb-3">{{ $ch->noi_dung }}</p>
+
+                    @if ($ch->loai === 'so')
+                        <div class="bg-gray-50 rounded-lg px-4 py-3 inline-block">
+                            <span class="text-xs text-gray-400">Giá trị trung bình: </span>
+                            <span class="text-sm font-semibold text-gray-800">
+                                {{ $ch->trungBinh !== null ? number_format($ch->trungBinh, 2) : 'Chưa có dữ liệu' }}
                             </span>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr><td colspan="6" class="p-10 text-center text-gray-400">
-                        <i class="fa-solid fa-inbox text-2xl mb-2 block"></i>
-                        Chưa có khảo sát nào được nộp.
-                    </td></tr>
-                    @endforelse
-                </tbody>
-            </table>
+                        </div>
+                    @else
+                        <div class="space-y-2">
+                            @foreach ($ch->dapAns as $da)
+                            <div>
+                                <div class="flex items-center justify-between text-sm mb-1">
+                                    <span class="text-gray-600">{{ $da->noi_dung }}</span>
+                                    <span class="text-gray-500 tabular-nums">{{ $da->soLuong }} DN ({{ number_format($da->tyLe, 1) }}%)</span>
+                                </div>
+                                <div class="w-full bg-gray-100 rounded-full h-2">
+                                    <div class="bg-indigo-500 h-2 rounded-full" style="width: {{ $da->tyLe }}%"></div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+                @endforeach
+            </div>
         </div>
+        @endforeach
+        @endif
     </div>
 </x-app-layout>

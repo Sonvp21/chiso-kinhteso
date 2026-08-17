@@ -15,8 +15,8 @@
                     </x-nav-link>
 
                     @if (auth()->user()->isQuanTri())
-                        <x-nav-link :href="route('admin.chi-so.index')" :active="request()->routeIs('admin.chi-so.*')">
-                            <i class="fa-solid fa-list-check mr-1.5"></i>{{ __('Bộ chỉ số') }}
+                        <x-nav-link :href="route('admin.nhom-chi-tieu.index')" :active="request()->routeIs('admin.nhom-chi-tieu.*') || request()->routeIs('admin.cau-hoi.*')">
+                            <i class="fa-solid fa-list-check mr-1.5"></i>{{ __('Nhóm chỉ tiêu') }}
                         </x-nav-link>
                         <x-nav-link :href="route('admin.phien-ban.index')" :active="request()->routeIs('admin.phien-ban.*')">
                             <i class="fa-solid fa-layer-group mr-1.5"></i>{{ __('Phiên bản') }}
@@ -77,8 +77,8 @@
             </x-responsive-nav-link>
 
             @if (auth()->user()->isQuanTri())
-                <x-responsive-nav-link :href="route('admin.chi-so.index')" :active="request()->routeIs('admin.chi-so.*')">
-                    <i class="fa-solid fa-list-check mr-2"></i>{{ __('Bộ chỉ số') }}
+                <x-responsive-nav-link :href="route('admin.nhom-chi-tieu.index')" :active="request()->routeIs('admin.nhom-chi-tieu.*') || request()->routeIs('admin.cau-hoi.*')">
+                    <i class="fa-solid fa-list-check mr-2"></i>{{ __('Nhóm chỉ tiêu') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.phien-ban.index')" :active="request()->routeIs('admin.phien-ban.*')">
                     <i class="fa-solid fa-layer-group mr-2"></i>{{ __('Phiên bản') }}

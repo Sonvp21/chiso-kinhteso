@@ -3,16 +3,112 @@
 namespace Database\Seeders;
 
 use App\Models\XaPhuong;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class XaPhuongSeeder extends Seeder
 {
     public function run(): void
     {
-        XaPhuong::insert([
-            ['ma_xa' => 'X001', 'ten_xa' => 'Xã Long Cốc', 'created_at' => now(), 'updated_at' => now()],
-            ['ma_xa' => 'X002', 'ten_xa' => 'Phường Trung tâm', 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        $danhSach = [
+    "x\u{e3} T\u{e2}n C\u{1b0}\u{1a1}ng",
+    "x\u{e3} \u{110}\u{1ea1}i Ph\u{fa}c",
+    "x\u{e3} Th\u{e0}nh C\u{f4}ng",
+    "x\u{e3} \u{110}\u{1ecb}nh H\u{f3}a",
+    "x\u{e3} B\u{ec}nh Y\u{ea}n",
+    "x\u{e3} Trung H\u{1ed9}i",
+    "x\u{e3} Ph\u{1b0}\u{1ee3}ng Ti\u{1ebf}n",
+    "x\u{e3} Ph\u{fa} \u{110}\u{ec}nh",
+    "x\u{e3} B\u{ec}nh Th\u{e0}nh",
+    "x\u{e3} Kim Ph\u{1b0}\u{1ee3}ng",
+    "x\u{e3} Lam V\u{1ef9}",
+    "x\u{e3} V\u{f5} Nhai",
+    "x\u{e3} D\u{e2}n Ti\u{1ebf}n",
+    "x\u{e3} Nghinh T\u{1b0}\u{1edd}ng",
+    "x\u{e3} Th\u{1ea7}n Sa",
+    "x\u{e3} La Hi\u{ea}n",
+    "x\u{e3} Tr\u{e0}ng X\u{e1}",
+    "x\u{e3} Ph\u{fa} L\u{1b0}\u{1a1}ng",
+    "x\u{e3} V\u{f4} Tranh",
+    "x\u{e3} Y\u{ea}n Tr\u{1ea1}ch",
+    "x\u{e3} H\u{1ee3}p Th\u{e0}nh",
+    "x\u{e3} \u{110}\u{1ed3}ng H\u{1ef7}",
+    "x\u{e3} Quang S\u{1a1}n",
+    "x\u{e3} Tr\u{1ea1}i Cau",
+    "x\u{e3} Nam H\u{f2}a",
+    "x\u{e3} V\u{103}n H\u{e1}n",
+    "x\u{e3} V\u{103}n L\u{103}ng",
+    "x\u{e3} \u{110}\u{1ea1}i T\u{1eeb}",
+    "x\u{e3} \u{110}\u{1ee9}c L\u{1b0}\u{1a1}ng",
+    "x\u{e3} Ph\u{fa} Th\u{1ecb}nh",
+    "x\u{e3} La B\u{1eb1}ng",
+    "x\u{e3} Ph\u{fa} L\u{1ea1}c",
+    "x\u{e3} An Kh\u{e1}nh",
+    "x\u{e3} Qu\u{e2}n Chu",
+    "x\u{e3} V\u{1ea1}n Ph\u{fa}",
+    "x\u{e3} Ph\u{fa} Xuy\u{ea}n",
+    "x\u{e3} Ph\u{fa} B\u{ec}nh",
+    "x\u{e3} T\u{e2}n Th\u{e0}nh",
+    "x\u{e3} \u{110}i\u{1ec1}m Th\u{1ee5}y",
+    "x\u{e3} Kha S\u{1a1}n",
+    "x\u{e3} T\u{e2}n Kh\u{e1}nh",
+    "x\u{e3} B\u{1eb1}ng Th\u{e0}nh",
+    "x\u{e3} Nghi\u{ea}n Loan",
+    "x\u{e3} Cao Minh",
+    "x\u{e3} Ba B\u{1ec3}",
+    "x\u{e3} Ch\u{1ee3} R\u{e3}",
+    "x\u{e3} Ph\u{fa}c L\u{1ed9}c",
+    "x\u{e3} Th\u{1b0}\u{1ee3}ng Minh",
+    "x\u{e3} \u{110}\u{1ed3}ng Ph\u{fa}c",
+    "x\u{e3} B\u{1eb1}ng V\u{e2}n",
+    "x\u{e3} Ng\u{e2}n S\u{1a1}n",
+    "x\u{e3} N\u{e0} Ph\u{1eb7}c",
+    "x\u{e3} Hi\u{1ec7}p L\u{1ef1}c",
+    "x\u{e3} Nam C\u{1b0}\u{1edd}ng",
+    "x\u{e3} Qu\u{1ea3}ng B\u{1ea1}ch",
+    "x\u{e3} Y\u{ea}n Th\u{1ecb}nh",
+    "x\u{e3} Ch\u{1ee3} \u{110}\u{1ed3}n",
+    "x\u{e3} Y\u{ea}n Phong",
+    "x\u{e3} Ngh\u{129}a T\u{e1}",
+    "x\u{e3} Ph\u{1ee7} Th\u{f4}ng",
+    "x\u{e3} C\u{1ea9}m Gi\u{e0}ng",
+    "x\u{e3} V\u{129}nh Th\u{f4}ng",
+    "x\u{e3} B\u{1ea1}ch Th\u{f4}ng",
+    "x\u{e3} Phong Quang",
+    "x\u{e3} V\u{103}n Lang",
+    "x\u{e3} C\u{1b0}\u{1edd}ng L\u{1ee3}i",
+    "x\u{e3} Na R\u{ec}",
+    "x\u{e3} Tr\u{1ea7}n Ph\u{fa}",
+    "x\u{e3} C\u{f4}n Minh",
+    "x\u{e3} Xu\u{e2}n D\u{1b0}\u{1a1}ng",
+    "x\u{e3} T\u{e2}n K\u{1ef3}",
+    "x\u{e3} Thanh Mai",
+    "x\u{e3} Thanh Th\u{1ecb}nh",
+    "x\u{e3} Ch\u{1ee3} M\u{1edb}i",
+    "x\u{e3} Y\u{ea}n B\u{ec}nh",
+    "ph\u{1b0}\u{1edd}ng Phan \u{110}\u{ec}nh Ph\u{f9}ng",
+    "ph\u{1b0}\u{1edd}ng Linh S\u{1a1}n",
+    "ph\u{1b0}\u{1edd}ng T\u{ed}ch L\u{1b0}\u{1a1}ng",
+    "ph\u{1b0}\u{1edd}ng Gia S\u{e0}ng",
+    "ph\u{1b0}\u{1edd}ng Quy\u{1ebf}t Th\u{1eaf}ng",
+    "ph\u{1b0}\u{1edd}ng Quan Tri\u{1ec1}u",
+    "ph\u{1b0}\u{1edd}ng S\u{f4}ng C\u{f4}ng",
+    "ph\u{1b0}\u{1edd}ng B\u{e1} Xuy\u{ea}n",
+    "ph\u{1b0}\u{1edd}ng B\u{e1}ch Quang",
+    "ph\u{1b0}\u{1edd}ng Ph\u{1ed5} Y\u{ea}n",
+    "ph\u{1b0}\u{1edd}ng V\u{1ea1}n Xu\u{e2}n",
+    "ph\u{1b0}\u{1edd}ng Trung Th\u{e0}nh",
+    "ph\u{1b0}\u{1edd}ng Ph\u{fa}c Thu\u{1ead}n",
+    "ph\u{1b0}\u{1edd}ng \u{110}\u{1ee9}c Xu\u{e2}n",
+    "ph\u{1b0}\u{1edd}ng B\u{1eaf}c K\u{1ea1}n",
+    "x\u{e3} S\u{1ea3}ng M\u{1ed9}c",
+    "x\u{e3} Th\u{1b0}\u{1ee3}ng Quan",
+        ];
+
+        foreach ($danhSach as $i => $ten) {
+            XaPhuong::updateOrCreate(
+                ['ma_xa' => sprintf('TN%02d', $i + 1)],
+                ['ten_xa' => $ten]
+            );
+        }
     }
 }

@@ -9,7 +9,7 @@
     <div class="py-8 max-w-6xl mx-auto px-4">
         @if (auth()->user()->isQuanTri())
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <a href="{{ route('admin.chi-so.index') }}" class="bg-white rounded-xl border border-gray-100 p-5 hover:border-indigo-200 hover:shadow-sm transition group">
+                <a href="{{ route('admin.nhom-chi-tieu.index') }}" class="bg-white rounded-xl border border-gray-100 p-5 hover:border-indigo-200 hover:shadow-sm transition group">
                     <i class="fa-solid fa-list-check text-2xl text-indigo-400 group-hover:text-indigo-600 transition"></i>
                     <p class="font-medium text-gray-800 mt-3">Bộ chỉ số</p>
                     <p class="text-sm text-gray-400 mt-1">Khai báo & quản lý chỉ tiêu</p>

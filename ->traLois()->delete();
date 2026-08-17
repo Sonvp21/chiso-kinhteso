@@ -1,0 +1,13 @@
+[90m= [39m[34;4mApp\Models\DoanhNghiepKhaoSat[39;24m {#8593
+    [34mid[39m: [35m1[39m,
+    [34muser_id[39m: [35m2[39m,
+    [34mnam[39m: [35m2026[39m,
+    [34mma_nganh[39m: [36mnull[39m,
+    [34mso_luong_lao_dong[39m: [36mnull[39m,
+    [34mquy_mo_von[39m: [36mnull[39m,
+    [34mloai_hinh_dn[39m: [36mnull[39m,
+    [34mtrang_thai[39m: [32m"[39m[32mda_tinh[39m[32m"[39m,
+    [34mngay_nop[39m: [32m"[39m[32m2026-08-17 07:39:48[39m[32m"[39m,
+    [34mcreated_at[39m: [32m"[39m[32m2026-08-17 07:38:40[39m[32m"[39m,
+    [34mupdated_at[39m: [32m"[39m[32m2026-08-17 07:39:48[39m[32m"[39m,
+  }
