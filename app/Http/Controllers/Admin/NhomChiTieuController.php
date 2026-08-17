@@ -40,6 +40,7 @@ class NhomChiTieuController extends Controller
             'ten' => 'required|string|max:255',
             'mo_ta' => 'nullable|string',
             'thu_tu' => 'required|integer|min:0',
+            'trong_so' => 'required|numeric|min:0|max:1',
             'kich_hoat' => 'boolean',
         ]);
     }

@@ -42,6 +42,7 @@ class CauHoiController extends Controller
             'noi_dung' => 'required|string',
             'loai' => 'required|in:chon_1,chon_nhieu,so',
             'thu_tu' => 'required|integer|min:0',
+            'trong_so' => 'required|numeric|min:0|max:1',
             'kich_hoat' => 'boolean',
         ]);
     }

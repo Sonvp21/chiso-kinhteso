@@ -8,8 +8,8 @@
 
     <div class="py-8 max-w-4xl mx-auto px-4" x-data="{
         modalOpen: false, mode: 'create',
-        form: { id: null, ma: '', ten: '', mo_ta: '', thu_tu: 0, kich_hoat: true },
-        openCreate() { this.mode='create'; this.form={ id:null, ma:'', ten:'', mo_ta:'', thu_tu:0, kich_hoat:true }; this.modalOpen=true; },
+        form: { id: null, ma: '', ten: '', mo_ta: '', thu_tu: 0, trong_so: 0, kich_hoat: true },
+        openCreate() { this.mode='create'; this.form={ id:null, ma:'', ten:'', mo_ta:'', thu_tu:0, trong_so:0, kich_hoat:true }; this.modalOpen=true; },
         openEdit(n) { this.mode='edit'; this.form={ ...n }; this.modalOpen=true; }
     }">
         @if (session('success'))
@@ -82,6 +82,10 @@
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">Thứ tự</label>
                         <input type="number" name="thu_tu" x-model="form.thu_tu" required class="w-full rounded-lg border border-gray-300 text-sm px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">Trọng số nhóm (0 - 1, tổng các nhóm nên = 1)</label>
+                        <input type="number" step="0.0001" min="0" max="1" name="trong_so" x-model="form.trong_so" required class="w-full rounded-lg border border-gray-300 text-sm px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500">
                     </div>
                     <div>
                         <label class="inline-flex items-center gap-2 text-sm text-gray-600">

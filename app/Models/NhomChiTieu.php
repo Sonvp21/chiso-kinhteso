@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class NhomChiTieu extends Model
 {
     protected $table = 'nhom_chi_tieu';
-    protected $fillable = ['ma', 'ten', 'mo_ta', 'thu_tu', 'kich_hoat'];
+    protected $fillable = ['ma', 'ten', 'mo_ta', 'thu_tu', 'trong_so', 'kich_hoat'];
     protected $casts = ['kich_hoat' => 'boolean'];
 
     public function cauHois()

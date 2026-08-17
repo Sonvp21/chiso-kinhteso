@@ -8,9 +8,17 @@
 
     <div class="py-8 max-w-4xl mx-auto px-4">
         <div class="flex items-center justify-between mb-6">
-            <div class="bg-white rounded-xl border border-gray-100 p-4 flex-1 mr-4">
+            <div class="bg-white rounded-xl border border-gray-100 p-4 mr-4">
                 <p class="text-xs text-gray-400 uppercase tracking-wide">Số doanh nghiệp đã nộp (năm {{ $nam }})</p>
                 <p class="text-2xl font-semibold text-gray-900 mt-1">{{ $tongSoDaNop }}</p>
+            </div>
+
+            <div class="bg-indigo-50 rounded-xl border border-indigo-100 p-4 flex-1 mr-4">
+                <p class="text-xs text-indigo-500 uppercase tracking-wide">Chỉ số kinh tế số tổng hợp</p>
+                <p class="text-2xl font-semibold text-indigo-700 mt-1">
+                    {{ $diemTongHop !== null ? number_format($diemTongHop, 2) : '—' }}
+                    @if ($diemTongHop !== null)<span class="text-sm font-normal text-indigo-400">/100</span>@endif
+                </p>
             </div>
 
             <div class="flex items-center gap-2 shrink-0 mr-4">
@@ -41,8 +49,9 @@
         @else
         @foreach ($nhoms as $nhom)
         <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
-            <div class="bg-gray-50/70 px-5 py-3 border-b border-gray-100">
-                <p class="text-sm font-semibold text-gray-700">{{ $nhom->ten }}</p>
+            <div class="bg-gray-50/70 px-5 py-3 border-b border-gray-100 flex items-center justify-between">
+                <p class="text-sm font-semibold text-gray-700">{{ $nhom->ten }} <span class="text-xs text-gray-400 font-normal">(trọng số {{ number_format($nhom->trong_so, 2) }})</span></p>
+                <span class="text-sm font-semibold text-indigo-600">{{ $nhom->diemNhom !== null ? number_format($nhom->diemNhom, 2) : '—' }}</span>
             </div>
 
             <div class="divide-y divide-gray-50">

@@ -13,9 +13,9 @@
 
     <div class="py-8 max-w-4xl mx-auto px-4" x-data="{
         chModalOpen: false, chMode: 'create',
-        chForm: { id: null, nhom_chi_tieu_id: {{ $nhomChiTieu->id }}, ma: '', noi_dung: '', loai: 'chon_1', thu_tu: 0, kich_hoat: true },
-        openChCreate() { this.chMode='create'; this.chForm={ id:null, nhom_chi_tieu_id:{{ $nhomChiTieu->id }}, ma:'', noi_dung:'', loai:'chon_1', thu_tu:0, kich_hoat:true }; this.chModalOpen=true; },
-        openChEdit(ch) { this.chMode='edit'; this.chForm={ id:ch.id, nhom_chi_tieu_id:{{ $nhomChiTieu->id }}, ma:ch.ma, noi_dung:ch.noi_dung, loai:ch.loai, thu_tu:ch.thu_tu, kich_hoat:ch.kich_hoat }; this.chModalOpen=true; },
+        chForm: { id: null, nhom_chi_tieu_id: {{ $nhomChiTieu->id }}, ma: '', noi_dung: '', loai: 'chon_1', thu_tu: 0, trong_so: 0, kich_hoat: true },
+        openChCreate() { this.chMode='create'; this.chForm={ id:null, nhom_chi_tieu_id:{{ $nhomChiTieu->id }}, ma:'', noi_dung:'', loai:'chon_1', thu_tu:0, trong_so:0, kich_hoat:true }; this.chModalOpen=true; },
+        openChEdit(ch) { this.chMode='edit'; this.chForm={ id:ch.id, nhom_chi_tieu_id:{{ $nhomChiTieu->id }}, ma:ch.ma, noi_dung:ch.noi_dung, loai:ch.loai, thu_tu:ch.thu_tu, trong_so:ch.trong_so, kich_hoat:ch.kich_hoat }; this.chModalOpen=true; },
 
         daModalOpen: false, daMode: 'create',
         daForm: { id: null, cau_hoi_id: null, noi_dung: '', diem_quy_doi: 0, thu_tu: 0 },
@@ -121,6 +121,10 @@
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">Thứ tự</label>
                         <input type="number" name="thu_tu" x-model="chForm.thu_tu" required class="w-full rounded-lg border border-gray-300 text-sm px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">Trọng số câu hỏi (0 - 1, tổng câu hỏi trong nhóm nên = 1)</label>
+                        <input type="number" step="0.0001" min="0" max="1" name="trong_so" x-model="chForm.trong_so" required class="w-full rounded-lg border border-gray-300 text-sm px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500">
                     </div>
                     <div>
                         <label class="inline-flex items-center gap-2 text-sm text-gray-600">
