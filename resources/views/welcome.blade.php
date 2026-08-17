@@ -12,93 +12,161 @@
     <script>
         tailwind.config = {
             theme: { extend: {
-                fontFamily: { sans: ['"Be Vietnam Pro"', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
-                colors: { indigo: { 50: '#eef2ff', 100: '#e0e7ff', 600: '#4f46e5', 700: '#4338ca' } }
+                fontFamily: { sans: ['"Be Vietnam Pro"', 'ui-sans-serif', 'system-ui', 'sans-serif'] }
             } }
         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-800">
-    <div class="min-h-screen flex flex-col">
-        <header class="max-w-6xl mx-auto w-full px-6 py-6 flex items-center justify-between">
-            <div class="flex items-center gap-2 text-indigo-600">
-                <i class="fa-solid fa-chart-line text-xl"></i>
-                <span class="text-lg font-semibold">Chỉ số Kinh tế số</span>
-            </div>
+    <!-- Thanh trên cùng -->
+    <div class="bg-blue-900 text-blue-100 text-xs">
+        <div class="max-w-6xl mx-auto px-6 py-1.5 flex items-center justify-between">
+            <span>Cổng thông tin Chỉ số Kinh tế số cấp tỉnh</span>
+            <span class="hidden sm:inline">Sở Khoa học và Công nghệ</span>
+        </div>
+    </div>
+
+    <!-- Header chính thức -->
+    <header class="bg-white border-b-4 border-blue-800">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded bg-blue-800 text-white flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-chart-line text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-base font-bold text-blue-900 leading-tight">HỆ THỐNG KHẢO SÁT</p>
+                    <p class="text-sm text-gray-500 leading-tight">Chỉ số Kinh tế số cấp tỉnh</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
                 @auth
-                    <a href="{{ route('dashboard') }}" class="px-4 py-2 text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">Vào hệ thống</a>
+                    <a href="{{ route('dashboard') }}" class="px-4 py-2 text-sm font-semibold bg-blue-800 hover:bg-blue-900 text-white rounded transition">
+                        Vào hệ thống
+                    </a>
                 @else
-                    <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition">Đăng nhập</a>
-                    <a href="{{ route('register') }}" class="px-4 py-2 text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">Đăng ký</a>
+                    <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-medium text-blue-800 hover:text-blue-900 transition">Đăng nhập</a>
+                    <a href="{{ route('register') }}" class="px-4 py-2 text-sm font-semibold bg-blue-800 hover:bg-blue-900 text-white rounded transition">Đăng ký</a>
                 @endauth
             </div>
-        </header>
+        </div>
+    </header>
 
-        <main class="flex-1 flex items-center">
-            <div class="max-w-6xl mx-auto w-full px-6 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <span class="inline-block px-3 py-1 text-xs font-medium bg-indigo-50 text-indigo-700 rounded-full mb-4">
-                        Phiên bản bộ chỉ số 2026
-                    </span>
-                    <h1 class="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
-                        Đo lường Chỉ số<br>Kinh tế số cấp tỉnh
-                    </h1>
-                    <p class="text-gray-500 mt-4 text-base leading-relaxed max-w-md">
-                        Doanh nghiệp khảo sát, hệ thống tự động chuẩn hóa và tính điểm theo bộ chỉ số — minh bạch, nhất quán, dễ theo dõi theo từng năm.
-                    </p>
-                    <div class="flex items-center gap-3 mt-8">
-                        @auth
-                            <a href="{{ route('dashboard') }}" class="px-5 py-3 text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition inline-flex items-center gap-2">
-                                Vào hệ thống <i class="fa-solid fa-arrow-right text-xs"></i>
-                            </a>
-                        @else
-                            <a href="{{ route('register') }}" class="px-5 py-3 text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">
-                                Bắt đầu ngay
-                            </a>
-                            <a href="{{ route('login') }}" class="px-5 py-3 text-sm font-medium bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-lg transition">
-                                Đăng nhập
-                            </a>
-                        @endauth
-                    </div>
-                </div>
-
-                <div class="bg-white border border-gray-100 rounded-2xl p-6 space-y-4">
-                    <div class="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
-                        <div class="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
-                            <i class="fa-solid fa-list-check"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-800">Khai báo bộ chỉ số</p>
-                            <p class="text-xs text-gray-400">Chỉ tiêu, nhóm, trọng số theo năm</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
-                        <div class="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
-                            <i class="fa-solid fa-clipboard-list"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-800">Doanh nghiệp khảo sát</p>
-                            <p class="text-xs text-gray-400">Nhập số liệu, lưu nháp, nộp chính thức</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
-                        <div class="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
-                            <i class="fa-solid fa-chart-column"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-800">Tự động tính điểm</p>
-                            <p class="text-xs text-gray-400">Chuẩn hóa, tổng hợp, xếp mức đánh giá</p>
-                        </div>
-                    </div>
+    <!-- Banner giới thiệu -->
+    <section class="bg-blue-800 text-white">
+        <div class="max-w-6xl mx-auto px-6 py-14 grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+            <div class="lg:col-span-2">
+                <h1 class="text-3xl sm:text-4xl font-bold leading-tight">
+                    Khảo sát và đánh giá mức độ<br>chuyển đổi số của doanh nghiệp
+                </h1>
+                <p class="text-blue-200 mt-4 text-base leading-relaxed max-w-2xl">
+                    Hệ thống thu thập số liệu khảo sát từ doanh nghiệp trên địa bàn tỉnh, phục vụ công tác tổng hợp,
+                    thống kê và xây dựng Chỉ số Kinh tế số theo quy định.
+                </p>
+                <div class="flex items-center gap-3 mt-6">
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="px-5 py-2.5 text-sm font-semibold bg-white hover:bg-blue-50 text-blue-800 rounded transition">
+                            Vào hệ thống
+                        </a>
+                    @else
+                        <a href="{{ route('register') }}" class="px-5 py-2.5 text-sm font-semibold bg-white hover:bg-blue-50 text-blue-800 rounded transition">
+                            Đăng ký khảo sát
+                        </a>
+                        <a href="{{ route('login') }}" class="px-5 py-2.5 text-sm font-semibold border border-blue-300 hover:bg-blue-700 text-white rounded transition">
+                            Đăng nhập
+                        </a>
+                    @endauth
                 </div>
             </div>
-        </main>
+            <div class="bg-blue-700/50 border border-blue-600 rounded p-5">
+                <p class="text-xs font-semibold text-blue-200 uppercase tracking-wide mb-3">Quy trình thực hiện</p>
+                <ol class="space-y-2.5 text-sm">
+                    <li class="flex gap-2.5"><span class="font-bold text-blue-200">1.</span> Đăng ký tài khoản doanh nghiệp</li>
+                    <li class="flex gap-2.5"><span class="font-bold text-blue-200">2.</span> Hoàn thành phiếu khảo sát trực tuyến</li>
+                    <li class="flex gap-2.5"><span class="font-bold text-blue-200">3.</span> Nộp và nhận kết quả tổng hợp</li>
+                </ol>
+            </div>
+        </div>
+    </section>
 
-        <footer class="max-w-6xl mx-auto w-full px-6 py-6 text-center text-xs text-gray-400">
-            Chỉ số Kinh tế số cấp tỉnh — {{ date('Y') }}
-        </footer>
-    </div>
+    <!-- Nhóm chỉ tiêu -->
+    <section class="max-w-6xl mx-auto px-6 py-14">
+        <div class="flex items-center gap-2 mb-1">
+            <span class="w-1 h-5 bg-blue-800"></span>
+            <h2 class="text-lg font-bold text-blue-900 uppercase tracking-wide">Các nhóm chỉ tiêu khảo sát</h2>
+        </div>
+        <p class="text-sm text-gray-500 mb-6 ml-3">Bộ phiếu khảo sát được xây dựng theo 5 nhóm chỉ tiêu chính</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="bg-white border border-gray-200 rounded p-5">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-9 h-9 rounded bg-blue-50 text-blue-800 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <p class="font-semibold text-gray-900">Tỷ lệ triển khai ứng dụng</p>
+                </div>
+                <p class="text-sm text-gray-500">Mức độ ứng dụng CNTT cơ bản trong công tác quản lý doanh nghiệp</p>
+            </div>
+            <div class="bg-white border border-gray-200 rounded p-5">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-9 h-9 rounded bg-blue-50 text-blue-800 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <p class="font-semibold text-gray-900">Hạ tầng lưu trữ dữ liệu</p>
+                </div>
+                <p class="text-sm text-gray-500">Hiện trạng lưu trữ, phân tích và ứng dụng công nghệ quản lý dữ liệu</p>
+            </div>
+            <div class="bg-white border border-gray-200 rounded p-5">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-9 h-9 rounded bg-blue-50 text-blue-800 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+                    <p class="font-semibold text-gray-900">Hạ tầng dịch vụ số</p>
+                </div>
+                <p class="text-sm text-gray-500">Website, thương mại điện tử, thanh toán trực tuyến, ứng dụng AI</p>
+            </div>
+            <div class="bg-white border border-gray-200 rounded p-5">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-9 h-9 rounded bg-blue-50 text-blue-800 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <p class="font-semibold text-gray-900">Hạ tầng nhân lực</p>
+                </div>
+                <p class="text-sm text-gray-500">Nhận thức, mức độ sẵn sàng đầu tư và tiếp cận công nghệ mới</p>
+            </div>
+            <div class="bg-white border border-gray-200 rounded p-5">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-9 h-9 rounded bg-blue-50 text-blue-800 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                    </div>
+                    <p class="font-semibold text-gray-900">Xu hướng ứng dụng ICT</p>
+                </div>
+                <p class="text-sm text-gray-500">Định hướng chuyển đổi số và nhu cầu hỗ trợ của doanh nghiệp</p>
+            </div>
+            <div class="bg-white border border-gray-200 rounded p-5">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-9 h-9 rounded bg-blue-50 text-blue-800 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-coins"></i>
+                    </div>
+                    <p class="font-semibold text-gray-900">Giá trị gia tăng doanh nghiệp</p>
+                </div>
+                <p class="text-sm text-gray-500">Số liệu tài chính phục vụ tính toán chỉ số kinh tế số</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer chính thức -->
+    <footer class="bg-blue-950 text-blue-200">
+        <div class="max-w-6xl mx-auto px-6 py-8 grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+            <div>
+                <p class="font-semibold text-white">Hệ thống Khảo sát Chỉ số Kinh tế số</p>
+                <p class="mt-1 text-blue-300">Phục vụ công tác tổng hợp, thống kê chỉ số kinh tế số cấp tỉnh theo từng năm.</p>
+            </div>
+            <div class="sm:text-right text-blue-300">
+                <p>© {{ date('Y') }} Chỉ số Kinh tế số cấp tỉnh</p>
+                <p>Mọi thắc mắc vui lòng liên hệ đơn vị quản lý hệ thống</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

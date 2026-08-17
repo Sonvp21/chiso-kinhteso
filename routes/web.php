@@ -9,7 +9,20 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $nam = (int) date('Y');
+
+    if (auth()->user()->isQuanTri()) {
+        $soDaNop = \App\Models\DoanhNghiepKhaoSat::where('nam', $nam)->where('trang_thai', 'da_tinh')->count();
+        $soNhom = \App\Models\NhomChiTieu::where('kich_hoat', true)->count();
+        $soCauHoi = \App\Models\CauHoi::where('kich_hoat', true)->count();
+        $phienBanDangApDung = \App\Models\BoChiSoPhienBan::where('dang_ap_dung', true)->first();
+
+        return view('dashboard', compact('nam', 'soDaNop', 'soNhom', 'soCauHoi', 'phienBanDangApDung'));
+    }
+
+    $khaoSatNam = \App\Models\DoanhNghiepKhaoSat::where('user_id', auth()->id())->where('nam', $nam)->first();
+
+    return view('dashboard', compact('nam', 'khaoSatNam'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

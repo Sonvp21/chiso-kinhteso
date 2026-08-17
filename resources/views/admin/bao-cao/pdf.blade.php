@@ -17,9 +17,12 @@
 <body>
     <h1>Bao cao thong ke chi tieu kinh te so</h1>
     <p class="sub">Nam {{ $nam }} - So doanh nghiep da nop: {{ $tongSoDaNop }} - Xuat luc {{ now()->format('H:i d/m/Y') }}</p>
+    <p style="font-size:13px; font-weight:bold; margin-bottom:10px;">
+        Chi so kinh te so tong hop: {{ $diemTongHop !== null ? number_format($diemTongHop, 2) . '/100' : 'Chua co du lieu' }}
+    </p>
 
     @foreach ($nhoms as $nhom)
-        <div class="nhom">{{ $nhom->ten }}</div>
+        <div class="nhom">{{ $nhom->ten }} (trong so {{ number_format($nhom->trong_so, 2) }}) - Diem nhom: {{ $nhom->diemNhom !== null ? number_format($nhom->diemNhom, 2) : '-' }}</div>
         @foreach ($nhom->cauHois as $ch)
             <div class="ch">{{ $ch->noi_dung }}</div>
             @if ($ch->loai === 'so')
