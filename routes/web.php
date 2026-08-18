@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\BoChiSoPhienBanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,7 +16,12 @@ Route::get('/dashboard', function () {
         $soCauHoi = \App\Models\CauHoi::where('kich_hoat', true)->count();
         $phienBanDangApDung = \App\Models\BoChiSoPhienBan::where('dang_ap_dung', true)->first();
 
-        return view('dashboard', compact('nam', 'soDaNop', 'soNhom', 'soCauHoi', 'phienBanDangApDung'));
+        $baoCaoController = new \App\Http\Controllers\Admin\BaoCaoController();
+        $xepHang = $baoCaoController->layXepHang($nam);
+        $top5 = array_slice($xepHang, 0, 5);
+        $diemTheoNhom = $baoCaoController->layDiemTheoNhom($nam);
+
+        return view('dashboard', compact('nam', 'soDaNop', 'soNhom', 'soCauHoi', 'phienBanDangApDung', 'top5', 'diemTheoNhom'));
     }
 
     $khaoSatNam = \App\Models\DoanhNghiepKhaoSat::where('user_id', auth()->id())->where('nam', $nam)->first();
@@ -35,7 +39,7 @@ Route::middleware('auth')->group(function () {
 
     // Admin
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
-        Route::resource('phien-ban', BoChiSoPhienBanController::class)->except(['create', 'edit', 'show']);
+        Route::resource('phien-ban', \App\Http\Controllers\Admin\BoChiSoPhienBanController::class)->except(['create', 'edit', 'show']);
         Route::get('bao-cao', [\App\Http\Controllers\Admin\BaoCaoController::class, 'index'])->name('bao-cao');
         Route::get('bao-cao/xuat-csv', [\App\Http\Controllers\Admin\BaoCaoController::class, 'xuatCsv'])->name('bao-cao.xuat-csv');
         Route::get('bao-cao/xuat-pdf', [\App\Http\Controllers\Admin\BaoCaoController::class, 'xuatPdf'])->name('bao-cao.xuat-pdf');

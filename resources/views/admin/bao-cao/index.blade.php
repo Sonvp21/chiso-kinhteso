@@ -2,11 +2,11 @@
     <x-slot name="header">
         <div>
             <h2 class="font-semibold text-lg text-gray-900">Báo cáo tổng hợp</h2>
-            <p class="text-xs text-gray-500 mt-0.5">Thống kê tỷ lệ % và chỉ số kinh tế số theo từng chỉ tiêu khảo sát</p>
+            <p class="text-xs text-gray-500 mt-0.5">Thống kê tỷ lệ %, xếp hạng và chỉ số kinh tế số theo từng chỉ tiêu khảo sát</p>
         </div>
     </x-slot>
 
-    <div class="mx-auto">
+    <div class="max-w-4xl mx-auto">
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6">
             <div class="bg-white border border-gray-200 rounded-xl p-4 flex-1">
                 <p class="text-xs text-gray-400">Số doanh nghiệp đã nộp (năm {{ $nam }})</p>
@@ -44,6 +44,100 @@
             Chưa có khảo sát nào được nộp trong năm {{ $nam }}.
         </div>
         @else
+
+        @if (count($diemQuaCacNam) > 1)
+        <!-- Biểu đồ đường so sánh qua các năm -->
+        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-4">
+            <p class="text-sm font-semibold text-gray-800 mb-3">So sánh chỉ số kinh tế số qua các năm</p>
+            <canvas id="lineYearChart"></canvas>
+        </div>
+        @endif
+
+        <!-- Biểu đồ radar điểm theo nhóm -->
+        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-4">
+            <p class="text-sm font-semibold text-gray-800 mb-3">Biểu đồ điểm theo nhóm chỉ tiêu</p>
+            <div class="max-w-md mx-auto">
+                <canvas id="radarChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Xếp hạng doanh nghiệp -->
+        @if (count($xepHang) > 0)
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mb-4">
+            <div class="px-4 py-3 bg-gray-50 border-b border-gray-100">
+                <p class="text-sm font-semibold text-gray-800">Xếp hạng doanh nghiệp</p>
+            </div>
+            <div class="max-w-lg mx-auto p-4">
+                <canvas id="rankBarChart" height="{{ min(count($xepHang), 10) * 40 + 20 }}"></canvas>
+            </div>
+            <div class="divide-y divide-gray-50">
+                @foreach ($xepHang as $i => $dn)
+                <div class="flex items-center justify-between px-4 py-2.5">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="w-6 h-6 rounded-full {{ $i === 0 ? 'bg-amber-400' : ($i === 1 ? 'bg-gray-300' : ($i === 2 ? 'bg-amber-700' : 'bg-gray-100')) }} {{ $i < 3 ? 'text-white' : 'text-gray-500' }} flex items-center justify-center text-[11px] font-semibold shrink-0">
+                            {{ $i + 1 }}
+                        </span>
+                        <span class="text-sm text-gray-800 truncate">{{ $dn['ten'] }}</span>
+                    </div>
+                    <div class="flex items-center gap-3 shrink-0">
+                        <span class="text-sm font-semibold text-gray-700 tabular-nums">{{ $dn['diem'] !== null ? number_format($dn['diem'], 2) : '—' }}</span>
+                        @php $m = $dn['muc']; @endphp
+                        <span class="text-[11px] px-2 py-0.5 rounded-full font-medium
+                            {{ $m === 'Tốt' ? 'bg-emerald-50 text-emerald-700' :
+                               ($m === 'Khá' ? 'bg-blue-50 text-blue-700' :
+                               ($m === 'Trung bình' ? 'bg-amber-50 text-amber-700' : 'bg-gray-100 text-gray-500')) }}">
+                            {{ $m }}
+                        </span>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
+        @if (count($diemTheoNganh) > 0)
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mb-4">
+            <div class="px-4 py-3 bg-gray-50 border-b border-gray-100">
+                <p class="text-sm font-semibold text-gray-800">So sánh điểm trung bình theo mã ngành</p>
+            </div>
+            <div class="divide-y divide-gray-50">
+                @foreach ($diemTheoNganh as $ng)
+                <div class="px-4 py-3">
+                    <div class="flex items-center justify-between text-sm mb-1.5">
+                        <span class="text-gray-700">{{ $ng['ten'] }} <span class="text-gray-400 text-xs">({{ $ng['so_dn'] }} DN)</span></span>
+                        <span class="font-semibold text-gray-800">{{ number_format($ng['diem_tb'], 2) }}</span>
+                    </div>
+                    <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-blue-600 rounded-full" style="width: {{ min($ng['diem_tb'], 100) }}%"></div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
+        @if (count($diemTheoXaPhuong) > 0)
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mb-4">
+            <div class="px-4 py-3 bg-gray-50 border-b border-gray-100">
+                <p class="text-sm font-semibold text-gray-800">So sánh điểm trung bình theo xã/phường</p>
+            </div>
+            <div class="divide-y divide-gray-50">
+                @foreach ($diemTheoXaPhuong as $xp)
+                <div class="px-4 py-3">
+                    <div class="flex items-center justify-between text-sm mb-1.5">
+                        <span class="text-gray-700">{{ $xp['ten'] }} <span class="text-gray-400 text-xs">({{ $xp['so_dn'] }} DN)</span></span>
+                        <span class="font-semibold text-gray-800">{{ number_format($xp['diem_tb'], 2) }}</span>
+                    </div>
+                    <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-teal-600 rounded-full" style="width: {{ min($xp['diem_tb'], 100) }}%"></div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
+        <!-- Chi tiết theo nhóm -->
         <div class="space-y-2.5">
         @foreach ($nhoms as $nhom)
         @php
@@ -98,4 +192,74 @@
         </div>
         @endif
     </div>
+
+    @if ($tongSoDaNop > 0)
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script>
+        const nhomLabels = {!! json_encode($nhoms->pluck('ten')) !!};
+        const nhomDiem = {!! json_encode($nhoms->map(fn($n) => $n->diemNhom ?? 0)) !!};
+
+        @if (count($diemQuaCacNam) > 1)
+        new Chart(document.getElementById('lineYearChart'), {
+            type: 'line',
+            data: {
+                labels: {!! json_encode(collect($diemQuaCacNam)->pluck('nam')) !!},
+                datasets: [{
+                    label: 'Chỉ số kinh tế số tổng hợp',
+                    data: {!! json_encode(collect($diemQuaCacNam)->map(fn($d) => $d['diem'] ?? 0)) !!},
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                    tension: 0.3,
+                    fill: true,
+                }]
+            },
+            options: {
+                scales: { y: { min: 0, max: 100 } },
+                plugins: { legend: { display: false } }
+            }
+        });
+        @endif
+
+        new Chart(document.getElementById('radarChart'), {
+            type: 'radar',
+            data: {
+                labels: nhomLabels,
+                datasets: [{
+                    label: 'Điểm nhóm (0-100)',
+                    data: nhomDiem,
+                    backgroundColor: 'rgba(37, 99, 235, 0.15)',
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    pointBackgroundColor: 'rgba(37, 99, 235, 1)',
+                }]
+            },
+            options: {
+                scales: { r: { min: 0, max: 100, ticks: { stepSize: 20, font: { size: 10 } }, pointLabels: { font: { size: 11 } } } },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        @if (count($xepHang) > 0)
+        const rankLabels = {!! json_encode(collect($xepHang)->take(10)->pluck('ten')) !!};
+        const rankDiem = {!! json_encode(collect($xepHang)->take(10)->map(fn($d) => $d['diem'] ?? 0)) !!};
+
+        new Chart(document.getElementById('rankBarChart'), {
+            type: 'bar',
+            data: {
+                labels: rankLabels,
+                datasets: [{
+                    label: 'Điểm tổng hợp',
+                    data: rankDiem,
+                    backgroundColor: 'rgba(37, 99, 235, 0.7)',
+                    borderRadius: 4,
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                scales: { x: { min: 0, max: 100 } },
+                plugins: { legend: { display: false } }
+            }
+        });
+        @endif
+    </script>
+    @endif
 </x-app-layout>
