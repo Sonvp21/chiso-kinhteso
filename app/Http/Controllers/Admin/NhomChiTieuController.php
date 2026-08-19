@@ -17,18 +17,21 @@ class NhomChiTieuController extends Controller
 
     public function store(Request $request)
     {
-        NhomChiTieu::create($this->validated($request));
+        $n = NhomChiTieu::create($this->validated($request));
+        \App\Support\NhatKy::ghi('tao', 'nhom_chi_tieu', $n->id, "Tạo nhóm {$n->ma}");
         return back()->with('success', 'Đã thêm nhóm chỉ tiêu.');
     }
 
     public function update(Request $request, NhomChiTieu $nhomChiTieu)
     {
         $nhomChiTieu->update($this->validated($request, $nhomChiTieu->id));
+        \App\Support\NhatKy::ghi('sua', 'nhom_chi_tieu', $nhomChiTieu->id, "Sửa nhóm {$nhomChiTieu->ma}");
         return back()->with('success', 'Đã cập nhật nhóm chỉ tiêu.');
     }
 
     public function destroy(NhomChiTieu $nhomChiTieu)
     {
+        \App\Support\NhatKy::ghi('xoa', 'nhom_chi_tieu', $nhomChiTieu->id, "Xóa nhóm {$nhomChiTieu->ma}");
         $nhomChiTieu->delete();
         return back()->with('success', 'Đã xóa nhóm chỉ tiêu.');
     }

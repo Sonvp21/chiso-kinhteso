@@ -4,7 +4,14 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $nam = (int) date('Y');
+    $baoCao = new \App\Http\Controllers\Admin\BaoCaoController();
+
+    $tongDaNop = \App\Models\DoanhNghiepKhaoSat::where('nam', $nam)->where('trang_thai', 'da_tinh')->count();
+    $diemTheoNhom = $tongDaNop > 0 ? $baoCao->layDiemTheoNhom($nam) : ['labels' => [], 'diem' => []];
+    $diemQuaCacNam = $baoCao->layDiemQuaCacNam();
+
+    return view('welcome', compact('nam', 'tongDaNop', 'diemTheoNhom', 'diemQuaCacNam'));
 });
 
 Route::get('/dashboard', function () {
@@ -43,6 +50,9 @@ Route::middleware('auth')->group(function () {
         Route::get('bao-cao', [\App\Http\Controllers\Admin\BaoCaoController::class, 'index'])->name('bao-cao');
         Route::get('bao-cao/xuat-csv', [\App\Http\Controllers\Admin\BaoCaoController::class, 'xuatCsv'])->name('bao-cao.xuat-csv');
         Route::get('bao-cao/xuat-pdf', [\App\Http\Controllers\Admin\BaoCaoController::class, 'xuatPdf'])->name('bao-cao.xuat-pdf');
+        Route::get('bao-cao/xuat-excel', [\App\Http\Controllers\Admin\BaoCaoController::class, 'xuatExcel'])->name('bao-cao.xuat-excel');
+        Route::get('bao-cao/xuat-word', [\App\Http\Controllers\Admin\BaoCaoController::class, 'xuatWord'])->name('bao-cao.xuat-word');
+        Route::get('nhat-ky', [\App\Http\Controllers\Admin\BaoCaoController::class, 'nhatKy'])->name('nhat-ky');
 
         Route::resource('nhom-chi-tieu', \App\Http\Controllers\Admin\NhomChiTieuController::class)->except(['create', 'edit', 'show']);
         Route::get('nhom-chi-tieu/{nhomChiTieu}/cau-hoi', [\App\Http\Controllers\Admin\CauHoiController::class, 'index'])->name('cau-hoi.index');

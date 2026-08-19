@@ -55,6 +55,9 @@
                     <a href="{{ route('admin.bao-cao') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition {{ request()->routeIs('admin.bao-cao') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-600 hover:bg-gray-50' }}" :class="collapsed ? 'lg:justify-center' : ''" title="Báo cáo">
                         <i class="fa-solid fa-chart-column w-4 text-center shrink-0 text-[13px]"></i> <span x-show="!collapsed" x-cloak>Báo cáo</span>
                     </a>
+                    <a href="{{ route('admin.nhat-ky') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition {{ request()->routeIs('admin.nhat-ky') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-600 hover:bg-gray-50' }}" :class="collapsed ? 'lg:justify-center' : ''" title="Nhật ký">
+                        <i class="fa-solid fa-clock-rotate-left w-4 text-center shrink-0 text-[13px]"></i> <span x-show="!collapsed" x-cloak>Nhật ký</span>
+                    </a>
                 @else
                     <p class="px-3 pt-4 pb-1 text-[10px] font-semibold text-gray-400 uppercase tracking-wider" x-show="!collapsed" x-cloak>Doanh nghiệp</p>
                     <a href="{{ route('khao-sat.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition {{ request()->routeIs('khao-sat.*') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-600 hover:bg-gray-50' }}" :class="collapsed ? 'lg:justify-center' : ''" title="Khảo sát của tôi">

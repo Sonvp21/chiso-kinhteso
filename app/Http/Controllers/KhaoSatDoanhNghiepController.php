@@ -71,19 +71,19 @@ class KhaoSatDoanhNghiepController extends Controller
     public function luu(Request $request, DoanhNghiepKhaoSat $doanhNghiepKhaoSat)
     {
         abort_unless($doanhNghiepKhaoSat->user_id === Auth::id(), 403);
-        abort_if($doanhNghiepKhaoSat->trang_thai === 'da_tinh', 403, 'Khao sat da nop, khong the sua.');
+        abort_if($doanhNghiepKhaoSat->trang_thai === 'da_tinh', 403, 'Khảo sát đã nộp, không thể sửa.');
 
         $this->luuTraLoi($request, $doanhNghiepKhaoSat);
         $this->luuThongTinChung($request, $doanhNghiepKhaoSat);
         $this->luuTaiChinh($request, $doanhNghiepKhaoSat);
 
-        return back()->with('success', 'Da luu nhap.');
+        return back()->with('success', 'Đã lưu nháp.');
     }
 
     public function nop(Request $request, DoanhNghiepKhaoSat $doanhNghiepKhaoSat)
     {
         abort_unless($doanhNghiepKhaoSat->user_id === Auth::id(), 403);
-        abort_if($doanhNghiepKhaoSat->trang_thai === 'da_tinh', 403, 'Khao sat da nop truoc do.');
+        abort_if($doanhNghiepKhaoSat->trang_thai === 'da_tinh', 403, 'Khảo sát đã nộp trước đó.');
 
         $this->luuTraLoi($request, $doanhNghiepKhaoSat);
         $this->luuThongTinChung($request, $doanhNghiepKhaoSat);
@@ -100,7 +100,7 @@ class KhaoSatDoanhNghiepController extends Controller
         $thieu = $cauHoiCanTraLoi->diff($daTraLoi);
 
         if ($thieu->isNotEmpty()) {
-            return back()->with('error', 'Vui long tra loi day du tat ca cau hoi truoc khi nop.');
+            return back()->with('error', 'Vui lòng trả lời đầy đủ tất cả câu hỏi trước khi nộp.');
         }
 
         $doanhNghiepKhaoSat->update([
@@ -108,7 +108,9 @@ class KhaoSatDoanhNghiepController extends Controller
             'ngay_nop' => now(),
         ]);
 
-        return redirect()->route('khao-sat.edit', $doanhNghiepKhaoSat)->with('success', 'Da nop khao sat thanh cong.');
+        \App\Support\NhatKy::ghi('nop', 'doanh_nghiep_khao_sat', $doanhNghiepKhaoSat->id, "Nộp khảo sát năm {$doanhNghiepKhaoSat->nam}");
+
+        return redirect()->route('khao-sat.edit', $doanhNghiepKhaoSat)->with('success', 'Đã nộp khảo sát thành công.');
     }
 
     private function luuThongTinChung(Request $request, DoanhNghiepKhaoSat $doanhNghiepKhaoSat): void

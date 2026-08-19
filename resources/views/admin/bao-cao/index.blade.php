@@ -1,13 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        <div>
-            <h2 class="font-semibold text-lg text-gray-900">Báo cáo tổng hợp</h2>
-            <p class="text-xs text-gray-500 mt-0.5">Thống kê tỷ lệ %, xếp hạng và chỉ số kinh tế số theo từng chỉ tiêu khảo sát</p>
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="font-semibold text-lg text-gray-900">Báo cáo tổng hợp</h2>
+                <p class="text-xs text-gray-500 mt-0.5">Thống kê, xếp hạng và chỉ số kinh tế số theo từng chỉ tiêu khảo sát</p>
+            </div>
+            <a href="{{ route('admin.nhat-ky') }}" class="text-xs text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1">
+                <i class="fa-solid fa-clock-rotate-left"></i> Nhật ký thao tác
+            </a>
         </div>
     </x-slot>
 
     <div class="max-w-4xl mx-auto">
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-4">
             <div class="bg-white border border-gray-200 rounded-xl p-4 flex-1">
                 <p class="text-xs text-gray-400">Số doanh nghiệp đã nộp (năm {{ $nam }})</p>
                 <p class="text-2xl font-semibold text-gray-900 mt-1">{{ $tongSoDaNop }}</p>
@@ -19,23 +24,49 @@
                     @if ($diemTongHop !== null)<span class="text-sm font-normal text-blue-400">/100</span>@endif
                 </p>
             </div>
-            <div class="flex items-center gap-2 shrink-0">
-                @if ($cacNam->count() > 1)
-                <form method="GET">
-                    <select name="nam" onchange="this.form.submit()" class="rounded-lg border border-gray-300 text-sm px-3 py-2.5 focus:border-blue-600 focus:ring-blue-600">
-                        @foreach ($cacNam as $n)
-                            <option value="{{ $n }}" {{ $n == $nam ? 'selected' : '' }}>Năm {{ $n }}</option>
-                        @endforeach
-                    </select>
-                </form>
-                @endif
-                <a href="{{ route('admin.bao-cao.xuat-csv', ['nam' => $nam]) }}" class="px-3.5 py-2.5 text-sm bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg transition inline-flex items-center gap-2">
-                    <i class="fa-solid fa-file-csv"></i> CSV
-                </a>
-                <a href="{{ route('admin.bao-cao.xuat-pdf', ['nam' => $nam]) }}" class="px-3.5 py-2.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition inline-flex items-center gap-2">
-                    <i class="fa-solid fa-file-pdf"></i> PDF
-                </a>
+        </div>
+
+        @if ($diemManhYeu['manh'] || $diemManhYeu['yeu'])
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+            @if ($diemManhYeu['manh'])
+            <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
+                <p class="text-xs text-emerald-600 flex items-center gap-1.5"><i class="fa-solid fa-arrow-trend-up"></i> Điểm mạnh nhất</p>
+                <p class="text-sm font-semibold text-emerald-800 mt-1">{{ $diemManhYeu['manh']['ten'] }}</p>
+                <p class="text-xs text-emerald-600 mt-0.5">{{ $diemManhYeu['manh']['diem'] }} điểm</p>
             </div>
+            @endif
+            @if ($diemManhYeu['yeu'])
+            <div class="bg-red-50 border border-red-100 rounded-xl p-4">
+                <p class="text-xs text-red-500 flex items-center gap-1.5"><i class="fa-solid fa-arrow-trend-down"></i> Điểm yếu nhất</p>
+                <p class="text-sm font-semibold text-red-800 mt-1">{{ $diemManhYeu['yeu']['ten'] }}</p>
+                <p class="text-xs text-red-500 mt-0.5">{{ $diemManhYeu['yeu']['diem'] }} điểm</p>
+            </div>
+            @endif
+        </div>
+        @endif
+
+        <div class="flex items-center gap-2 mb-6 flex-wrap">
+            @if ($cacNam->count() > 1)
+            <form method="GET">
+                <select name="nam" onchange="this.form.submit()" class="rounded-lg border border-gray-300 text-sm px-3 py-2.5 focus:border-blue-600 focus:ring-blue-600">
+                    @foreach ($cacNam as $n)
+                        <option value="{{ $n }}" {{ $n == $nam ? 'selected' : '' }}>Năm {{ $n }}</option>
+                    @endforeach
+                </select>
+            </form>
+            @endif
+            <a href="{{ route('admin.bao-cao.xuat-csv', ['nam' => $nam]) }}" class="px-3 py-2.5 text-sm bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg transition inline-flex items-center gap-2">
+                <i class="fa-solid fa-file-csv"></i> CSV
+            </a>
+            <a href="{{ route('admin.bao-cao.xuat-excel', ['nam' => $nam]) }}" class="px-3 py-2.5 text-sm bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg transition inline-flex items-center gap-2">
+                <i class="fa-solid fa-file-excel text-emerald-600"></i> Excel
+            </a>
+            <a href="{{ route('admin.bao-cao.xuat-word', ['nam' => $nam]) }}" class="px-3 py-2.5 text-sm bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg transition inline-flex items-center gap-2">
+                <i class="fa-solid fa-file-word text-blue-600"></i> Word
+            </a>
+            <a href="{{ route('admin.bao-cao.xuat-pdf', ['nam' => $nam]) }}" class="px-3 py-2.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition inline-flex items-center gap-2">
+                <i class="fa-solid fa-file-pdf"></i> PDF
+            </a>
         </div>
 
         @if ($tongSoDaNop === 0)
@@ -46,14 +77,12 @@
         @else
 
         @if (count($diemQuaCacNam) > 1)
-        <!-- Biểu đồ đường so sánh qua các năm -->
         <div class="bg-white border border-gray-200 rounded-xl p-4 mb-4">
             <p class="text-sm font-semibold text-gray-800 mb-3">So sánh chỉ số kinh tế số qua các năm</p>
             <canvas id="lineYearChart"></canvas>
         </div>
         @endif
 
-        <!-- Biểu đồ radar điểm theo nhóm -->
         <div class="bg-white border border-gray-200 rounded-xl p-4 mb-4">
             <p class="text-sm font-semibold text-gray-800 mb-3">Biểu đồ điểm theo nhóm chỉ tiêu</p>
             <div class="max-w-md mx-auto">
@@ -61,7 +90,6 @@
             </div>
         </div>
 
-        <!-- Xếp hạng doanh nghiệp -->
         @if (count($xepHang) > 0)
         <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mb-4">
             <div class="px-4 py-3 bg-gray-50 border-b border-gray-100">
@@ -137,7 +165,6 @@
         </div>
         @endif
 
-        <!-- Chi tiết theo nhóm -->
         <div class="space-y-2.5">
         @foreach ($nhoms as $nhom)
         @php
@@ -199,6 +226,24 @@
         const nhomLabels = {!! json_encode($nhoms->pluck('ten')) !!};
         const nhomDiem = {!! json_encode($nhoms->map(fn($n) => $n->diemNhom ?? 0)) !!};
 
+        new Chart(document.getElementById('radarChart'), {
+            type: 'radar',
+            data: {
+                labels: nhomLabels,
+                datasets: [{
+                    label: 'Điểm nhóm (0-100)',
+                    data: nhomDiem,
+                    backgroundColor: 'rgba(37, 99, 235, 0.15)',
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    pointBackgroundColor: 'rgba(37, 99, 235, 1)',
+                }]
+            },
+            options: {
+                scales: { r: { min: 0, max: 100, ticks: { stepSize: 20, font: { size: 10 } }, pointLabels: { font: { size: 11 } } } },
+                plugins: { legend: { display: false } }
+            }
+        });
+
         @if (count($diemQuaCacNam) > 1)
         new Chart(document.getElementById('lineYearChart'), {
             type: 'line',
@@ -220,35 +265,14 @@
         });
         @endif
 
-        new Chart(document.getElementById('radarChart'), {
-            type: 'radar',
-            data: {
-                labels: nhomLabels,
-                datasets: [{
-                    label: 'Điểm nhóm (0-100)',
-                    data: nhomDiem,
-                    backgroundColor: 'rgba(37, 99, 235, 0.15)',
-                    borderColor: 'rgba(37, 99, 235, 1)',
-                    pointBackgroundColor: 'rgba(37, 99, 235, 1)',
-                }]
-            },
-            options: {
-                scales: { r: { min: 0, max: 100, ticks: { stepSize: 20, font: { size: 10 } }, pointLabels: { font: { size: 11 } } } },
-                plugins: { legend: { display: false } }
-            }
-        });
-
         @if (count($xepHang) > 0)
-        const rankLabels = {!! json_encode(collect($xepHang)->take(10)->pluck('ten')) !!};
-        const rankDiem = {!! json_encode(collect($xepHang)->take(10)->map(fn($d) => $d['diem'] ?? 0)) !!};
-
         new Chart(document.getElementById('rankBarChart'), {
             type: 'bar',
             data: {
-                labels: rankLabels,
+                labels: {!! json_encode(collect($xepHang)->take(10)->pluck('ten')) !!},
                 datasets: [{
                     label: 'Điểm tổng hợp',
-                    data: rankDiem,
+                    data: {!! json_encode(collect($xepHang)->take(10)->map(fn($d) => $d['diem'] ?? 0)) !!},
                     backgroundColor: 'rgba(37, 99, 235, 0.7)',
                     borderRadius: 4,
                 }]

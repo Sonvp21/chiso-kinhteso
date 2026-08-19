@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Chỉ số Kinh tế số') }}</title>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -26,7 +25,6 @@
             <span class="hidden sm:inline">Sở Khoa học và Công nghệ</span>
         </div>
     </div>
-
     <!-- Header chính thức -->
     <header class="bg-white border-b-4 border-blue-800">
         <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -51,7 +49,6 @@
             </div>
         </div>
     </header>
-
     <!-- Banner giới thiệu -->
     <section class="bg-blue-800 text-white">
         <div class="max-w-6xl mx-auto px-6 py-14 grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
@@ -89,14 +86,76 @@
         </div>
     </section>
 
-    <!-- Nhóm chỉ tiêu -->
+    <!-- Số liệu & biểu đồ tổng hợp -->
     <section class="max-w-6xl mx-auto px-6 py-14">
+        <div class="flex items-center gap-2 mb-1">
+            <span class="w-1 h-5 bg-blue-800"></span>
+            <h2 class="text-lg font-bold text-blue-900 uppercase tracking-wide">Số liệu khảo sát năm {{ $nam }}</h2>
+        </div>
+        <p class="text-sm text-gray-500 mb-6 ml-3">Tổng hợp kết quả khảo sát chỉ số kinh tế số trên địa bàn tỉnh</p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white border border-gray-200 rounded p-4">
+                <p class="text-xs text-gray-400">Doanh nghiệp tham gia</p>
+                <p class="text-2xl font-bold text-blue-900 mt-1">{{ $tongDaNop }}</p>
+            </div>
+            <div class="bg-white border border-gray-200 rounded p-4">
+                <p class="text-xs text-gray-400">Nhóm chỉ tiêu</p>
+                <p class="text-2xl font-bold text-blue-900 mt-1">{{ count($diemTheoNhom['labels']) }}</p>
+            </div>
+            @if ($tongDaNop > 0)
+            <div class="bg-white border border-gray-200 rounded p-4 col-span-2 sm:col-span-1">
+                <p class="text-xs text-gray-400">Chỉ số TB cao nhất</p>
+                <p class="text-lg font-bold text-emerald-700 mt-1">
+                    {{ count($diemTheoNhom['diem']) ? number_format(max($diemTheoNhom['diem']), 1) : '—' }}
+                </p>
+            </div>
+            <div class="bg-white border border-gray-200 rounded p-4 col-span-2 sm:col-span-1">
+                <p class="text-xs text-gray-400">Chỉ số TB thấp nhất</p>
+                <p class="text-lg font-bold text-red-700 mt-1">
+                    {{ count($diemTheoNhom['diem']) ? number_format(min($diemTheoNhom['diem']), 1) : '—' }}
+                </p>
+            </div>
+            @endif
+        </div>
+
+        @if ($tongDaNop > 0)
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="bg-white border border-gray-200 rounded p-5">
+                <p class="text-sm font-semibold text-gray-800 mb-3">Điểm trung bình theo nhóm chỉ tiêu</p>
+                <div class="max-w-sm mx-auto">
+                    <canvas id="publicRadarChart"></canvas>
+                </div>
+            </div>
+            @if (count($diemQuaCacNam) > 1)
+            <div class="bg-white border border-gray-200 rounded p-5">
+                <p class="text-sm font-semibold text-gray-800 mb-3">Xu hướng chỉ số kinh tế số qua các năm</p>
+                <canvas id="publicLineChart"></canvas>
+            </div>
+            @else
+            <div class="bg-white border border-gray-200 rounded p-5 flex items-center justify-center text-center">
+                <div>
+                    <i class="fa-solid fa-chart-line text-2xl text-gray-300 mb-2"></i>
+                    <p class="text-sm text-gray-400">Xu hướng nhiều năm sẽ hiển thị khi có dữ liệu từ 2 năm trở lên.</p>
+                </div>
+            </div>
+            @endif
+        </div>
+        @else
+        <div class="bg-white border border-gray-200 rounded p-10 text-center text-gray-400 text-sm">
+            <i class="fa-solid fa-chart-simple text-2xl mb-2 block"></i>
+            Chưa có dữ liệu khảo sát năm {{ $nam }} để hiển thị biểu đồ.
+        </div>
+        @endif
+    </section>
+
+    <!-- Nhóm chỉ tiêu -->
+    <section class="max-w-6xl mx-auto px-6 pb-14">
         <div class="flex items-center gap-2 mb-1">
             <span class="w-1 h-5 bg-blue-800"></span>
             <h2 class="text-lg font-bold text-blue-900 uppercase tracking-wide">Các nhóm chỉ tiêu khảo sát</h2>
         </div>
         <p class="text-sm text-gray-500 mb-6 ml-3">Bộ phiếu khảo sát được xây dựng theo 5 nhóm chỉ tiêu chính</p>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div class="bg-white border border-gray-200 rounded p-5">
                 <div class="flex items-center gap-3 mb-2">
@@ -154,7 +213,6 @@
             </div>
         </div>
     </section>
-
     <!-- Footer chính thức -->
     <footer class="bg-blue-950 text-blue-200">
         <div class="max-w-6xl mx-auto px-6 py-8 grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
@@ -168,5 +226,49 @@
             </div>
         </div>
     </footer>
+
+    @if ($tongDaNop > 0)
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script>
+        new Chart(document.getElementById('publicRadarChart'), {
+            type: 'radar',
+            data: {
+                labels: {!! json_encode($diemTheoNhom['labels']) !!},
+                datasets: [{
+                    label: 'Điểm trung bình',
+                    data: {!! json_encode($diemTheoNhom['diem']) !!},
+                    backgroundColor: 'rgba(30, 64, 175, 0.15)',
+                    borderColor: 'rgba(30, 64, 175, 1)',
+                    pointBackgroundColor: 'rgba(30, 64, 175, 1)',
+                }]
+            },
+            options: {
+                scales: { r: { min: 0, max: 100, ticks: { stepSize: 20, font: { size: 10 } }, pointLabels: { font: { size: 10 } } } },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        @if (count($diemQuaCacNam) > 1)
+        new Chart(document.getElementById('publicLineChart'), {
+            type: 'line',
+            data: {
+                labels: {!! json_encode(collect($diemQuaCacNam)->pluck('nam')) !!},
+                datasets: [{
+                    label: 'Chỉ số kinh tế số tổng hợp',
+                    data: {!! json_encode(collect($diemQuaCacNam)->map(fn($d) => $d['diem'] ?? 0)) !!},
+                    borderColor: 'rgba(30, 64, 175, 1)',
+                    backgroundColor: 'rgba(30, 64, 175, 0.1)',
+                    tension: 0.3,
+                    fill: true,
+                }]
+            },
+            options: {
+                scales: { y: { min: 0, max: 100 } },
+                plugins: { legend: { display: false } }
+            }
+        });
+        @endif
+    </script>
+    @endif
 </body>
 </html>
