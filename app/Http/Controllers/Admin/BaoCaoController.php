@@ -27,10 +27,11 @@ class BaoCaoController extends Controller
         $diemTheoNganh = $this->layDiemTheoNganh($nam);
         $diemTheoXaPhuong = $this->layDiemTheoXaPhuong($nam);
         $diemManhYeu = $this->layDiemManhYeu($nhoms);
+        $baoCaoTaiChinh = $this->layBaoCaoTaiChinh($nam);
 
         return view('admin.bao-cao.index', compact(
             'nhoms', 'tongSoDaNop', 'nam', 'cacNam', 'diemTongHop', 'xepHang',
-            'diemQuaCacNam', 'diemTheoNganh', 'diemTheoXaPhuong', 'diemManhYeu'
+            'diemQuaCacNam', 'diemTheoNganh', 'diemTheoXaPhuong', 'diemManhYeu', 'baoCaoTaiChinh'
         ));
     }
 
@@ -317,6 +318,34 @@ class BaoCaoController extends Controller
         }
         usort($ketQua, fn($a, $b) => $b['diem_tb'] <=> $a['diem_tb']);
         return $ketQua;
+    }
+
+    public function layBaoCaoTaiChinh(int $nam): array
+    {
+        $khaoSatIds = \App\Models\DoanhNghiepKhaoSat::where('nam', $nam)
+            ->where('trang_thai', 'da_tinh')
+            ->pluck('id');
+
+        $duLieu = \App\Models\DuLieuTaiChinh::whereIn('doanh_nghiep_khao_sat_id', $khaoSatIds)
+            ->where('nam', $nam)
+            ->get();
+
+        $tongDoanhThu = (float) $duLieu->sum('tong_doanh_thu');
+        $tongChiPhi = (float) $duLieu->sum('tong_chi_phi');
+        $tongDoanhThuKinhTeSo = (float) $duLieu->sum(fn($d) => $d->dt_ha_tang_so + $d->dt_nen_tang_so + $d->dt_ung_dung_pm + $d->dt_tmdt);
+        $tongChiNenTangSo = (float) $duLieu->sum(fn($d) => $d->cp_quang_cao + $d->cp_duy_tri_web + $d->cp_san_xuat_hang_hoa + $d->cp_khac + $d->cp_van_chuyen);
+        $tongGiaTriGiaTang = (float) $duLieu->sum(fn($d) => $d->khau_hao_tscd + $d->thu_nhap_lao_dong + $d->so_thue_phai_nop);
+
+        return [
+            'tong_doanh_thu' => $tongDoanhThu,
+            'tong_chi_phi' => $tongChiPhi,
+            'tong_loi_nhuan' => $tongDoanhThu - $tongChiPhi,
+            'tong_dt_kinh_te_so' => $tongDoanhThuKinhTeSo,
+            'tong_chi_nen_tang_so' => $tongChiNenTangSo,
+            'dong_gop_kinh_te_so' => $tongDoanhThu > 0 ? round($tongDoanhThuKinhTeSo / $tongDoanhThu * 100, 2) : null,
+            'tong_gia_tri_gia_tang' => $tongGiaTriGiaTang,
+            'so_luong_co_du_lieu' => $duLieu->count(),
+        ];
     }
 
     public function layXepHang(int $nam): array

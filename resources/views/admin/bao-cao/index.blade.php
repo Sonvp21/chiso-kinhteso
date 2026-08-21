@@ -11,7 +11,7 @@
         </div>
     </x-slot>
 
-    <div class="max-w-4xl mx-auto">
+    <div class="mx-auto">
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-4">
             <div class="bg-white border border-gray-200 rounded-xl p-4 flex-1">
                 <p class="text-xs text-gray-400">Số doanh nghiệp đã nộp (năm {{ $nam }})</p>
@@ -42,6 +42,47 @@
                 <p class="text-xs text-red-500 mt-0.5">{{ $diemManhYeu['yeu']['diem'] }} điểm</p>
             </div>
             @endif
+        </div>
+        @endif
+
+        @if ($baoCaoTaiChinh['so_luong_co_du_lieu'] > 0)
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mb-4">
+            <div class="px-4 py-3 bg-gray-50 border-b border-gray-100">
+                <p class="text-sm font-semibold text-gray-800">Báo cáo tài chính tổng hợp toàn tỉnh (đơn vị: triệu đồng)</p>
+                <p class="text-xs text-gray-400 mt-0.5">{{ $baoCaoTaiChinh['so_luong_co_du_lieu'] }} doanh nghiệp có dữ liệu tài chính năm {{ $nam }}</p>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y sm:divide-y-0 divide-gray-100">
+                <div class="p-4">
+                    <p class="text-xs text-gray-400">Tổng doanh thu</p>
+                    <p class="text-lg font-semibold text-gray-900 mt-1">{{ number_format($baoCaoTaiChinh['tong_doanh_thu'], 1) }}</p>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-gray-400">Tổng chi phí</p>
+                    <p class="text-lg font-semibold text-gray-900 mt-1">{{ number_format($baoCaoTaiChinh['tong_chi_phi'], 1) }}</p>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-gray-400">Tổng lợi nhuận</p>
+                    <p class="text-lg font-semibold {{ $baoCaoTaiChinh['tong_loi_nhuan'] >= 0 ? 'text-emerald-600' : 'text-red-600' }} mt-1">{{ number_format($baoCaoTaiChinh['tong_loi_nhuan'], 1) }}</p>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-gray-400">Tổng giá trị gia tăng</p>
+                    <p class="text-lg font-semibold text-gray-900 mt-1">{{ number_format($baoCaoTaiChinh['tong_gia_tri_gia_tang'], 1) }}</p>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-gray-400">Doanh thu kinh tế số</p>
+                    <p class="text-lg font-semibold text-blue-700 mt-1">{{ number_format($baoCaoTaiChinh['tong_dt_kinh_te_so'], 1) }}</p>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-gray-400">Chi cho nền tảng số</p>
+                    <p class="text-lg font-semibold text-gray-900 mt-1">{{ number_format($baoCaoTaiChinh['tong_chi_nen_tang_so'], 1) }}</p>
+                </div>
+                <div class="p-4 col-span-2">
+                    <p class="text-xs text-gray-400">Đóng góp của kinh tế số (DT kinh tế số / Tổng DT)</p>
+                    <p class="text-lg font-semibold text-blue-700 mt-1">
+                        {{ $baoCaoTaiChinh['dong_gop_kinh_te_so'] !== null ? number_format($baoCaoTaiChinh['dong_gop_kinh_te_so'], 2) . '%' : '—' }}
+                    </p>
+                </div>
+            </div>
         </div>
         @endif
 

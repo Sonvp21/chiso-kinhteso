@@ -119,8 +119,12 @@ class KhaoSatDoanhNghiepController extends Controller
             'ma_nganh' => 'nullable|string|max:20',
             'so_luong_lao_dong' => 'nullable|integer|min:0',
             'quy_mo_von' => 'nullable|numeric|min:0',
-            'loai_hinh_dn' => 'nullable|string|max:100',
+            'loai_hinh_dn' => 'nullable|string|in:tu_nhan,tnhh,co_phan,nha_nuoc,htx,fdi,ho_kd,ict',
         ]);
+
+        if (($data['loai_hinh_dn'] ?? null) !== 'ict') {
+            $data['ma_nganh'] = null;
+        }
 
         $doanhNghiepKhaoSat->update($data);
     }
@@ -131,22 +135,27 @@ class KhaoSatDoanhNghiepController extends Controller
             'tai_chinh' => 'nullable|array',
         ]);
 
-        foreach (($data['tai_chinh'] ?? []) as $nam => $row) {
-            $khauHao = $row['khau_hao_tscd'] ?? null;
-            $thuNhapLd = $row['thu_nhap_lao_dong'] ?? null;
-            $thuNhapDn = $row['thu_nhap_dn'] ?? null;
+        $cacTruong = [
+            'tong_doanh_thu', 'dt_ha_tang_so', 'dt_nen_tang_so', 'dt_ung_dung_pm', 'dt_tmdt',
+            'tong_chi_phi', 'cp_quang_cao', 'cp_duy_tri_web', 'cp_san_xuat_hang_hoa', 'cp_khac', 'cp_van_chuyen',
+            'khau_hao_tscd', 'thu_nhap_lao_dong', 'so_thue_phai_nop',
+        ];
 
-            if ($khauHao === null && $thuNhapLd === null && $thuNhapDn === null) {
-                continue;
+        foreach (($data['tai_chinh'] ?? []) as $nam => $row) {
+            $giaTri = [];
+            $coDuLieu = false;
+
+            foreach ($cacTruong as $truong) {
+                $v = $row[$truong] ?? null;
+                $giaTri[$truong] = ($v !== null && $v !== '') ? $v : null;
+                if ($giaTri[$truong] !== null) $coDuLieu = true;
             }
+
+            if (!$coDuLieu) continue;
 
             \App\Models\DuLieuTaiChinh::updateOrCreate(
                 ['doanh_nghiep_khao_sat_id' => $doanhNghiepKhaoSat->id, 'nam' => $nam],
-                [
-                    'khau_hao_tscd' => $khauHao !== '' ? $khauHao : null,
-                    'thu_nhap_lao_dong' => $thuNhapLd !== '' ? $thuNhapLd : null,
-                    'thu_nhap_dn' => $thuNhapDn !== '' ? $thuNhapDn : null,
-                ]
+                $giaTri
             );
         }
     }

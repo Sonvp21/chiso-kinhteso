@@ -6,7 +6,7 @@
         </div>
     </x-slot>
 
-    <div class="max-w-4xl mx-auto">
+    <div class="mx-auto">
         <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
             <div class="divide-y divide-gray-50">
                 @forelse ($logs as $log)
