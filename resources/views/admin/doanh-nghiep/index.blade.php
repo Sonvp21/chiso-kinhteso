@@ -6,7 +6,7 @@
         </div>
     </x-slot>
 
-    <div class="max-w-5xl mx-auto">
+    <div class="mx-auto">
         @if (session('success'))
             <div class="mb-4 px-4 py-2.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm flex items-center gap-2">
                 <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
