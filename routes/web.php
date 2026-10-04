@@ -54,6 +54,10 @@ Route::middleware('auth')->group(function () {
         Route::get('bao-cao/xuat-word', [\App\Http\Controllers\Admin\BaoCaoController::class, 'xuatWord'])->name('bao-cao.xuat-word');
         Route::get('nhat-ky', [\App\Http\Controllers\Admin\BaoCaoController::class, 'nhatKy'])->name('nhat-ky');
 
+        Route::get('doanh-nghiep', [\App\Http\Controllers\Admin\DoanhNghiepController::class, 'index'])->name('doanh-nghiep.index');
+        Route::delete('doanh-nghiep/{user}', [\App\Http\Controllers\Admin\DoanhNghiepController::class, 'destroy'])->name('doanh-nghiep.destroy');
+        Route::post('doanh-nghiep/khao-sat/{doanhNghiepKhaoSat}/mo-lai', [\App\Http\Controllers\Admin\DoanhNghiepController::class, 'moLaiKhaoSat'])->name('doanh-nghiep.mo-lai');
+
         Route::resource('nhom-chi-tieu', \App\Http\Controllers\Admin\NhomChiTieuController::class)->except(['create', 'edit', 'show']);
         Route::get('nhom-chi-tieu/{nhomChiTieu}/cau-hoi', [\App\Http\Controllers\Admin\CauHoiController::class, 'index'])->name('cau-hoi.index');
         Route::post('cau-hoi', [\App\Http\Controllers\Admin\CauHoiController::class, 'store'])->name('cau-hoi.store');
